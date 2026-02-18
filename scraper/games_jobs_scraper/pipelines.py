@@ -12,7 +12,9 @@ import os
 from dotenv import load_dotenv
 import Levenshtein
 
-load_dotenv()
+# Explicitly load from project root .env (scraper runs from scraper/ subfolder)
+_env_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '.env'))
+load_dotenv(dotenv_path=_env_path)
 
 
 class DataCleaningPipeline:
@@ -130,7 +132,7 @@ class DatabasePipeline:
 
             from app.nlp.keyword_extractor import KeywordExtractor
             # Path to keywords.yaml relative to scraper
-            config_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../config/keywords.yaml'))
+            config_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../config/keywords.yaml'))
             self.extractor = KeywordExtractor(config_path)
             spider.logger.info(f"Keyword Extractor initialized with config: {config_path}")
         except Exception as e:

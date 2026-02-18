@@ -31,7 +31,7 @@ async def get_jobs(
     """
     Get paginated list of job listings with optional filters.
     """
-    query = db.query(JobListing).filter(JobListing.is_active == 1)
+    query = db.query(JobListing).filter(JobListing.is_active != 0)
     
     # Apply filters
     if location:

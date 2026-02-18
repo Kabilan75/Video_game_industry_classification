@@ -32,9 +32,10 @@ ITEM_PIPELINES = {
     'games_jobs_scraper.pipelines.DatabasePipeline': 500,
 }
 
-# Enable and configure HTTP caching
-HTTPCACHE_ENABLED = True
-HTTPCACHE_EXPIRATION_SECS = 86400  # 24 hours
+# HTTP Cache — disabled by default so the spider always fetches live data.
+# Re-enable during development to avoid repeat hits: scrapy crawl hitmarker -s HTTPCACHE_ENABLED=True
+HTTPCACHE_ENABLED = False
+HTTPCACHE_EXPIRATION_SECS = 86400  # 24 hours (only used when cache is on)
 HTTPCACHE_DIR = "httpcache"
 HTTPCACHE_IGNORE_HTTP_CODES = [500, 502, 503, 504, 400, 403, 404]
 

@@ -3,6 +3,7 @@ import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
 import Jobs from './pages/Jobs';
 import Trends from './pages/Trends';
+import Regional from './pages/Regional';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/jobs" element={<Jobs />} />
             <Route path="/trends" element={<Trends />} />
+            <Route path="/regional" element={<Regional />} />
           </Routes>
         </main>
       </div>

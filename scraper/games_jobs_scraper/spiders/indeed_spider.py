@@ -4,7 +4,7 @@ This is a template spider - actual selectors need to be adjusted based on target
 """
 
 import scrapy
-from datetime import datetime
+from datetime import datetime, timedelta
 from games_jobs_scraper.items import JobItem
 
 

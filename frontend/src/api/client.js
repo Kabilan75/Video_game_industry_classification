@@ -16,7 +16,10 @@ export const getTopKeywords = (params) =>
 export const getTrends = (params) =>
     client.get('/api/trends', { params }).then(r => r.data);
 
-export const getRegional = (params) =>
-    client.get('/api/regional', { params }).then(r => r.data);
+export const getRegionalDistribution = (params) =>
+    client.get('/api/regional/distribution', { params }).then(r => r.data);
+
+export const getRegionalCompare = (params) =>
+    client.get('/api/regional/compare', { params }).then(r => r.data);
 
 export default client;
