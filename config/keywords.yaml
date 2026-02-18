@@ -1,0 +1,117 @@
+# Gaming Industry Job Keywords Configuration
+# This file is provided by the client at project start
+# Add keywords under each category that should be tracked in job descriptions
+
+skills:
+  # Programming Languages
+  - C++
+  - C#
+  - Python
+  - JavaScript
+  - TypeScript
+  - Lua
+  
+  # Game Development Skills
+  - Game Design
+  - Level Design
+  - Game Mechanics
+  - Gameplay Programming
+  - AI Programming
+  - Physics Programming
+  - Graphics Programming
+  - Network Programming
+  - UI/UX Design
+  - 3D Modeling
+  - Animation
+  - Rigging
+  - Texturing
+  - Sound Design
+  - Audio Engineering
+  
+  # General Skills
+  - Project Management
+  - Agile
+  - Scrum
+  - Version Control
+  - Git
+  - Problem Solving
+  - Team Collaboration
+  - Communication
+
+software:
+  # Game Engines
+  - Unity
+  - Unreal Engine
+  - Godot
+  - CryEngine
+  - GameMaker
+  
+  # 3D Software
+  - Blender
+  - Maya
+  - 3ds Max
+  - ZBrush
+  - Substance Painter
+  - Substance Designer
+  
+  # 2D Software
+  - Photoshop
+  - Illustrator
+  - Spine
+  - Aseprite
+  
+  # Version Control
+  - Git
+  - Perforce
+  - SVN
+  - GitHub
+  - GitLab
+  - Bitbucket
+  
+  # Project Management
+  - Jira
+  - Trello
+  - Asana
+  - Confluence
+  
+  # Audio
+  - FMOD
+  - Wwise
+  - Audacity
+  - Reaper
+
+experience:
+  # Seniority Levels
+  - Junior
+  - Mid-level
+  - Senior
+  - Lead
+  - Principal
+  - Director
+  
+  # Experience Types
+  - Entry Level
+  - Graduate
+  - Internship
+  - Contract
+  - Permanent
+  - Full-time
+  - Part-time
+  - Remote
+  
+  # Years of Experience
+  - 1+ years
+  - 2+ years
+  - 3+ years
+  - 5+ years
+  - 10+ years
+  
+  # Industry Experience
+  - AAA
+  - Indie
+  - Mobile Games
+  - Console Games
+  - PC Games
+  - VR/AR
+  - Multiplayer
+  - Live Service
