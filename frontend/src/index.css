@@ -84,3 +84,45 @@ body {
 .animate-pulse-slow {
   animation: pulse-slow 3s ease-in-out infinite;
 }
+
+/* ── Print / PDF Styles ──────────────────────────────────────────── */
+@media print {
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  /* Hide sidebar, topbar, and action buttons */
+  nav,
+  aside,
+  .no-print {
+    display: none !important;
+  }
+
+  /* Reset gradient text for print */
+  .gradient-text {
+    -webkit-text-fill-color: #000 !important;
+    background: none !important;
+  }
+
+  /* Make cards readable */
+  .rounded-xl,
+  .rounded-lg {
+    border: 1px solid #ccc !important;
+    background: #fff !important;
+    box-shadow: none !important;
+    color: #000 !important;
+  }
+
+  .text-white,
+  .text-\[\#94a3b8\],
+  .text-\[\#64748b\],
+  .text-\[\#475569\] {
+    color: #000 !important;
+  }
+
+  /* Page break helpers */
+  .page-break {
+    page-break-before: always;
+  }
+}

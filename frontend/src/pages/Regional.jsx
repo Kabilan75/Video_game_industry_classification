@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Loader2, MapPin } from 'lucide-react';
+import { Loader2, MapPin, Download, Printer } from 'lucide-react';
 import {
     BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell,
     RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Legend,
 } from 'recharts';
-import { getRegionalDistribution, getRegionalCompare } from '../api/client';
+import { getRegionalDistribution, getRegionalCompare, buildExportUrl } from '../api/client';
 
 const COLORS = ['#3b82f6', '#8b5cf6', '#06b6d4', '#10b981', '#f59e0b', '#ef4444', '#ec4899', '#6366f1'];
 
@@ -80,13 +80,32 @@ const Regional = () => {
     return (
         <div className="space-y-6">
             {/* Header */}
-            <div>
-                <h1 className="text-2xl font-bold text-white">
-                    Regional <span className="gradient-text">Analysis</span>
-                </h1>
-                <p className="text-[#64748b] text-sm mt-1">
-                    Geographic distribution of UK games industry jobs and skills
-                </p>
+            <div className="flex items-start justify-between">
+                <div>
+                    <h1 className="text-2xl font-bold text-white">
+                        Regional <span className="gradient-text">Analysis</span>
+                    </h1>
+                    <p className="text-[#64748b] text-sm mt-1">
+                        Geographic distribution of UK games industry jobs and skills
+                    </p>
+                </div>
+                <div className="flex gap-2">
+                    <a
+                        href={buildExportUrl('regional')}
+                        download
+                        className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#0d1117] border border-[#1e2d3d] text-sm text-[#94a3b8] hover:text-white hover:border-[#334155] transition-all"
+                        title="Download regional data as CSV"
+                    >
+                        <Download className="w-4 h-4" /> CSV
+                    </a>
+                    <button
+                        onClick={() => window.print()}
+                        className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#0d1117] border border-[#1e2d3d] text-sm text-[#94a3b8] hover:text-white hover:border-[#334155] transition-all"
+                        title="Print / Save as PDF"
+                    >
+                        <Printer className="w-4 h-4" /> Print
+                    </button>
+                </div>
             </div>
 
             {/* Category filter */}
@@ -96,8 +115,8 @@ const Regional = () => {
                         key={cat.key ?? 'all'}
                         onClick={() => setActiveCategory(cat.key)}
                         className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-all ${activeCategory === cat.key
-                                ? 'bg-blue-600 text-white'
-                                : 'bg-[#0d1117] border border-[#1e2d3d] text-[#94a3b8] hover:text-white hover:border-[#334155]'
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-[#0d1117] border border-[#1e2d3d] text-[#94a3b8] hover:text-white hover:border-[#334155]'
                             }`}
                     >
                         {cat.label}

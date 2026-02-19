@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Briefcase, Tag, TrendingUp, MapPin, Loader2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Briefcase, Tag, TrendingUp, MapPin, Loader2, Search, ArrowUpRight, ArrowDownRight, Minus } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import StatsCard from '../components/StatsCard';
-import { getJobs, getTopKeywords } from '../api/client';
+import { getJobs, getTopKeywords, getDashboardStats } from '../api/client';
 
 const CHART_COLORS = ['#3b82f6', '#8b5cf6', '#06b6d4', '#10b981', '#f59e0b', '#ef4444', '#ec4899', '#6366f1'];
 
@@ -18,18 +19,35 @@ const CustomTooltip = ({ active, payload, label }) => {
     return null;
 };
 
+const DeltaBadge = ({ delta, pct }) => {
+    if (delta === 0 || delta == null) return (
+        <span className="flex items-center gap-1 text-xs text-[#64748b]"><Minus className="w-3 h-3" /> No change</span>
+    );
+    const positive = delta > 0;
+    return (
+        <span className={`flex items-center gap-1 text-xs font-medium ${positive ? 'text-emerald-400' : 'text-red-400'}`}>
+            {positive ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
+            {positive ? '+' : ''}{delta} ({pct > 0 ? '+' : ''}{pct}%) vs last week
+        </span>
+    );
+};
+
 const Dashboard = () => {
+    const navigate = useNavigate();
+    const [searchQuery, setSearchQuery] = useState('');
     const [stats, setStats] = useState({ total: 0, locations: 0, keywords: 0 });
     const [keywords, setKeywords] = useState([]);
     const [recentJobs, setRecentJobs] = useState([]);
+    const [weekStats, setWeekStats] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const load = async () => {
             try {
-                const [jobsData, kwData] = await Promise.all([
+                const [jobsData, kwData, weekData] = await Promise.all([
                     getJobs({ page: 1, page_size: 5 }),
                     getTopKeywords({ limit: 12 }),
+                    getDashboardStats(),
                 ]);
                 setStats({
                     total: jobsData.total,
@@ -38,6 +56,7 @@ const Dashboard = () => {
                 });
                 setRecentJobs(jobsData.items);
                 setKeywords(kwData.keywords || []);
+                setWeekStats(weekData);
             } catch (e) {
                 console.error(e);
             } finally {
@@ -72,12 +91,49 @@ const Dashboard = () => {
                 </p>
             </div>
 
-            {/* Stats */}
+            {/* Search Bar */}
+            <div className="relative">
+                <input
+                    type="text"
+                    placeholder="Search relevant jobs in London..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            navigate(`/jobs?keyword=${searchQuery}&location=London`);
+                        }
+                    }}
+                    className="w-full bg-[#0d1117] border border-[#1e2d3d] rounded-xl py-4 pl-12 pr-4 text-white focus:outline-none focus:border-blue-500/50 transition-colors"
+                />
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#64748b]" />
+                <button
+                    onClick={() => navigate(`/jobs?keyword=${searchQuery}&location=London`)}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                >
+                    Search
+                </button>
+            </div>
+
+            {/* Stats with change indicators */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <StatsCard title="Total Jobs" value={stats.total} icon={Briefcase} color="blue" subtitle="Active listings" />
+                <div className="rounded-xl border border-[#1e2d3d] bg-[#0d1117] p-4">
+                    <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs text-[#64748b] uppercase tracking-wide">Total Jobs</span>
+                        <Briefcase className="w-4 h-4 text-blue-400" />
+                    </div>
+                    <p className="text-2xl font-bold text-white mb-1">{stats.total}</p>
+                    {weekStats && <DeltaBadge delta={weekStats.delta} pct={weekStats.delta_pct} />}
+                </div>
                 <StatsCard title="Top Keywords" value={keywords.length} icon={Tag} color="purple" subtitle="Tracked skills" />
                 <StatsCard title="UK Locations" value={stats.locations} icon={MapPin} color="emerald" subtitle="Cities covered" />
-                <StatsCard title="Data Source" value="Live" icon={TrendingUp} color="amber" subtitle="Hitmarker.net" />
+                <div className="rounded-xl border border-[#1e2d3d] bg-[#0d1117] p-4">
+                    <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs text-[#64748b] uppercase tracking-wide">This Week</span>
+                        <TrendingUp className={`w-4 h-4 ${weekStats?.trend === 'up' ? 'text-emerald-400' : weekStats?.trend === 'down' ? 'text-red-400' : 'text-amber-400'}`} />
+                    </div>
+                    <p className="text-2xl font-bold text-white mb-1">{weekStats?.this_week_jobs ?? '—'}</p>
+                    <p className="text-xs text-[#64748b]">new listings</p>
+                </div>
             </div>
 
             {/* Charts + Recent Jobs */}

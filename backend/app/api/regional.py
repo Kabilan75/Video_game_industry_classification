@@ -121,3 +121,92 @@ async def compare_regions(
         "regions": region_list,
         "comparison": comparison
     }
+
+
+@router.get("/heatmap")
+async def get_skills_region_heatmap(
+    db: Session = Depends(get_db),
+    limit_regions: int = Query(8, ge=2, le=20, description="Number of top regions"),
+    limit_keywords: int = Query(12, ge=2, le=30, description="Number of top keywords"),
+    category: Optional[str] = Query(None, description="Filter by keyword category"),
+):
+    """
+    Returns a skills × region heatmap matrix.
+    Rows = top keywords, Columns = top regions, Cell values = job counts.
+    This gives a true geographic view of skill demand across UK cities.
+    """
+    # 1. Get top regions by job count
+    top_regions = (
+        db.query(JobListing.location, func.count(JobListing.id).label("cnt"))
+        .filter(JobListing.is_active == 1, JobListing.location != None, JobListing.location != "")
+        .group_by(JobListing.location)
+        .order_by(func.count(JobListing.id).desc())
+        .limit(limit_regions)
+        .all()
+    )
+    region_names = [r.location for r in top_regions]
+
+    if not region_names:
+        return {"regions": [], "keywords": [], "matrix": []}
+
+    # 2. Get top keywords overall
+    kw_query = (
+        db.query(
+            Keyword.keyword,
+            func.count(KeywordOccurrence.job_id.distinct()).label("cnt")
+        )
+        .join(KeywordOccurrence)
+    )
+    if category:
+        kw_query = kw_query.filter(Keyword.category == category)
+
+    top_keywords = (
+        kw_query
+        .group_by(Keyword.id, Keyword.keyword)
+        .order_by(func.count(KeywordOccurrence.job_id.distinct()).desc())
+        .limit(limit_keywords)
+        .all()
+    )
+    keyword_names = [k.keyword for k in top_keywords]
+
+    if not keyword_names:
+        return {"regions": region_names, "keywords": [], "matrix": []}
+
+    # 3. Build the matrix: for each keyword × region, count distinct jobs
+    raw = (
+        db.query(
+            Keyword.keyword,
+            JobListing.location,
+            func.count(KeywordOccurrence.job_id.distinct()).label("count")
+        )
+        .join(KeywordOccurrence, Keyword.id == KeywordOccurrence.keyword_id)
+        .join(JobListing, KeywordOccurrence.job_id == JobListing.id)
+        .filter(
+            JobListing.is_active == 1,
+            JobListing.location.in_(region_names),
+            Keyword.keyword.in_(keyword_names),
+        )
+        .group_by(Keyword.keyword, JobListing.location)
+        .all()
+    )
+
+    # Build lookup dict
+    lookup = {}
+    for r in raw:
+        lookup[(r.keyword, r.location)] = r.count
+
+    # 4. Assemble matrix rows (one per keyword)
+    matrix = []
+    for kw in keyword_names:
+        row = {"keyword": kw}
+        for region in region_names:
+            row[region] = lookup.get((kw, region), 0)
+        matrix.append(row)
+
+    logger.info(f"Heatmap: {len(keyword_names)} keywords × {len(region_names)} regions")
+
+    return {
+        "regions": region_names,
+        "keywords": keyword_names,
+        "matrix": matrix
+    }

@@ -115,3 +115,63 @@ experience:
   - VR/AR
   - Multiplayer
   - Live Service
+
+roles:
+  # Art & Visual
+  - Artist
+  - 3D Artist
+  - 2D Artist
+  - Character Artist
+  - Environment Artist
+  - Concept Artist
+  - Technical Artist
+  - VFX Artist
+  - UI Artist
+  - Animator
+  
+  # Programming & Engineering
+  - Programmer
+  - Software Engineer
+  - Engine Programmer
+  - Tools Programmer
+  - Gameplay Programmer
+  - Graphics Programmer
+  - Backend Developer
+  - Frontend Developer
+  - DevOps Engineer
+  
+  # Design
+  - Game Designer
+  - Level Designer
+  - Systems Designer
+  - Narrative Designer
+  - UX Designer
+  - Economy Designer
+  
+  # Audio
+  - Sound Designer
+  - Audio Programmer
+  - Music Composer
+  
+  # Production & Management
+  - Producer
+  - Associate Producer
+  - Product Manager
+  - Project Manager
+  - Scrum Master
+  
+  # QA & Testing
+  - QA Tester
+  - QA Lead
+  - QA Analyst
+  - Test Automation
+  
+  # Community & Marketing
+  - Community Manager
+  - Marketing Manager
+  - Social Media Manager
+  
+  # Data & Analytics
+  - Data Analyst
+  - Data Scientist
+  - Live Ops
