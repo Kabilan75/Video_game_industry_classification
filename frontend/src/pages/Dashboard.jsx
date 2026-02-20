@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { Briefcase, Tag, TrendingUp, MapPin, Loader2, Search, ArrowUpRight, ArrowDownRight, Minus } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import StatsCard from '../components/StatsCard';
-import { getJobs, getTopKeywords, getDashboardStats } from '../api/client';
+import { getJobs, getTopKeywords, getDashboardStats, triggerScrape } from '../api/client';
+import { RefreshCw } from 'lucide-react';
 
 const CHART_COLORS = ['#3b82f6', '#8b5cf6', '#06b6d4', '#10b981', '#f59e0b', '#ef4444', '#ec4899', '#6366f1'];
 
@@ -40,6 +41,7 @@ const Dashboard = () => {
     const [recentJobs, setRecentJobs] = useState([]);
     const [weekStats, setWeekStats] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [scraping, setScraping] = useState(false);
 
     useEffect(() => {
         const load = async () => {
@@ -66,6 +68,18 @@ const Dashboard = () => {
         load();
     }, []);
 
+    const handleScrape = async () => {
+        setScraping(true);
+        try {
+            await triggerScrape();
+            alert('Scrapers started! Data will update in a few minutes. Please refresh later.');
+        } catch (e) {
+            alert('Failed to start scrapers. Is the backend running?');
+        } finally {
+            setScraping(false);
+        }
+    };
+
     const chartData = keywords.slice(0, 10).map(k => ({
         name: k.keyword,
         jobs: k.job_count,
@@ -82,13 +96,23 @@ const Dashboard = () => {
     return (
         <div className="space-y-6">
             {/* Header */}
-            <div>
-                <h1 className="text-2xl font-bold text-white">
-                    UK Games Industry <span className="gradient-text">Overview</span>
-                </h1>
-                <p className="text-[#64748b] text-sm mt-1">
-                    Real-time analysis of UK games industry job market
-                </p>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-2xl font-bold text-white">
+                        UK Games Industry <span className="gradient-text">Overview</span>
+                    </h1>
+                    <p className="text-[#64748b] text-sm mt-1">
+                        Real-time analysis of UK games industry job market
+                    </p>
+                </div>
+                <button
+                    onClick={handleScrape}
+                    disabled={scraping}
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium transition-all shadow-lg shadow-blue-500/20"
+                >
+                    {scraping ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
+                    {scraping ? 'Updating...' : 'Refresh Data'}
+                </button>
             </div>
 
             {/* Search Bar */}

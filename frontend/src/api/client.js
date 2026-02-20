@@ -51,4 +51,10 @@ export const buildExportUrl = (type, params = {}) => {
     return `${API_URL}/api/export/${type}${qs.toString() ? '?' + qs.toString() : ''}`;
 };
 
+export const triggerScrape = () =>
+    client.post('/admin/scrape').then(r => r.data);
+
+export const getScraperStatus = () =>
+    client.get('/admin/scraper-status').then(r => r.data);
+
 export default client;
