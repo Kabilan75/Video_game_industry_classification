@@ -98,3 +98,28 @@ async def global_exception_handler(request: Request, exc: Exception):
         extra={"context": {"path": request.url.path, "method": request.method}}
     )
     return JSONResponse(status_code=500, content={"detail": "Internal server error"})
+
+
+# ------------------------------------------------------------------------------
+# Frontend Static File Serving (for Single-Container Deployment)
+# ------------------------------------------------------------------------------
+import os
+from fastapi.staticfiles import StaticFiles
+
+# Check if static directory exists (it will in Docker production build)
+static_dir = os.path.join(os.path.dirname(__file__), "static")
+if os.path.exists(static_dir):
+    # Mount static files
+    app.mount("/assets", StaticFiles(directory=os.path.join(static_dir, "assets")), name="assets")
+    
+    # Catch-all route for SPA (React Router)
+    @app.get("/{full_path:path}")
+    async def serve_spa(full_path: str):
+        # Allow API routes to pass through (already handled above due to order)
+        if full_path.startswith("api") or full_path.startswith("docs") or full_path.startswith("openapi.json"):
+             return JSONResponse(status_code=404, content={"detail": "Not found"})
+             
+        # Serve index.html for everything else
+        return FileResponse(os.path.join(static_dir, "index.html"))
+
+from fastapi.responses import FileResponse

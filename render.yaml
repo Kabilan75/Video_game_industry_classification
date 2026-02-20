@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: games-industry-aggregator
+    env: docker
+    dockerfilePath: Dockerfile.render
+    plan: free
+    disk:
+      name: sqlite-data
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      - key: DATABASE_URL
+        value: sqlite:////data/games_industry_jobs.db
+      - key: LOG_LEVEL
+        value: INFO
+      - key: PORT
+        value: 10000
