@@ -38,7 +38,7 @@ COPY backend/app ./app
 COPY backend/logging_config.py .
 # Copy Scraper code (needed for scheduler to import spiders)
 COPY scraper/ ./scraper/
-COPY scrapy.cfg .
+COPY scraper/scrapy.cfg .
 
 # Copy Frontend build artifacts to backend static folder
 COPY --from=frontend-build /app/frontend/dist ./app/static
