@@ -103,7 +103,7 @@ const Dashboard = () => {
                             navigate(`/jobs?keyword=${searchQuery}&location=London`);
                         }
                     }}
-                    className="w-full bg-[#0d1117] border border-[#1e2d3d] rounded-xl py-4 pl-12 pr-4 text-white focus:outline-none focus:border-blue-500/50 transition-colors"
+                    className="w-full bg-[#0d1117] border border-[#1e2d3d] rounded-xl py-4 pl-12 pr-28 text-white focus:outline-none focus:border-blue-500/50 transition-colors"
                 />
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#64748b]" />
                 <button
@@ -115,7 +115,7 @@ const Dashboard = () => {
             </div>
 
             {/* Stats with change indicators */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div className="rounded-xl border border-[#1e2d3d] bg-[#0d1117] p-4">
                     <div className="flex items-center justify-between mb-2">
                         <span className="text-xs text-[#64748b] uppercase tracking-wide">Total Jobs</span>
@@ -137,9 +137,9 @@ const Dashboard = () => {
             </div>
 
             {/* Charts + Recent Jobs */}
-            <div className="grid grid-cols-1 xl:grid-cols-5 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
                 {/* Bar Chart */}
-                <div className="xl:col-span-3 rounded-xl border border-[#1e2d3d] bg-[#0d1117] p-5">
+                <div className="lg:col-span-3 rounded-xl border border-[#1e2d3d] bg-[#0d1117] p-5">
                     <h2 className="text-sm font-semibold text-white mb-1">Top In-Demand Skills</h2>
                     <p className="text-xs text-[#475569] mb-4">Number of job listings mentioning each skill</p>
                     {chartData.length > 0 ? (
@@ -163,7 +163,7 @@ const Dashboard = () => {
                 </div>
 
                 {/* Recent Jobs */}
-                <div className="xl:col-span-2 rounded-xl border border-[#1e2d3d] bg-[#0d1117] p-5">
+                <div className="lg:col-span-2 rounded-xl border border-[#1e2d3d] bg-[#0d1117] p-5">
                     <h2 className="text-sm font-semibold text-white mb-1">Recent Listings</h2>
                     <p className="text-xs text-[#475569] mb-4">Latest UK game industry jobs</p>
                     <div className="space-y-3">

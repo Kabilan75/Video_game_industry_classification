@@ -136,7 +136,7 @@ const Trends = () => {
 
     return (
         <div className="space-y-6">
-            <div className="flex items-start justify-between">
+            <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                 <div>
                     <h1 className="text-2xl font-bold text-white">
                         Keyword <span className="gradient-text">Trends</span>
@@ -153,7 +153,7 @@ const Trends = () => {
             </div>
 
             {/* Category tabs */}
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
                 {CATEGORIES.map(cat => (
                     <button
                         key={cat.key ?? 'all'}

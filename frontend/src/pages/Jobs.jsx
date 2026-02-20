@@ -41,7 +41,7 @@ const Jobs = () => {
 
     return (
         <div className="space-y-5">
-            <div className="flex items-start justify-between">
+            <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                 <div>
                     <h1 className="text-2xl font-bold text-white">
                         UK <span className="gradient-text">Job Listings</span>

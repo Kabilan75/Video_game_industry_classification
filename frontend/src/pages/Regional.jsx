@@ -80,7 +80,7 @@ const Regional = () => {
     return (
         <div className="space-y-6">
             {/* Header */}
-            <div className="flex items-start justify-between">
+            <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                 <div>
                     <h1 className="text-2xl font-bold text-white">
                         Regional <span className="gradient-text">Analysis</span>
@@ -89,18 +89,18 @@ const Regional = () => {
                         Geographic distribution of UK games industry jobs and skills
                     </p>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 w-full md:w-auto">
                     <a
                         href={buildExportUrl('regional')}
                         download
-                        className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#0d1117] border border-[#1e2d3d] text-sm text-[#94a3b8] hover:text-white hover:border-[#334155] transition-all"
+                        className="flex-1 md:flex-none flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-[#0d1117] border border-[#1e2d3d] text-sm text-[#94a3b8] hover:text-white hover:border-[#334155] transition-all"
                         title="Download regional data as CSV"
                     >
                         <Download className="w-4 h-4" /> CSV
                     </a>
                     <button
                         onClick={() => window.print()}
-                        className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#0d1117] border border-[#1e2d3d] text-sm text-[#94a3b8] hover:text-white hover:border-[#334155] transition-all"
+                        className="flex-1 md:flex-none flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-[#0d1117] border border-[#1e2d3d] text-sm text-[#94a3b8] hover:text-white hover:border-[#334155] transition-all"
                         title="Print / Save as PDF"
                     >
                         <Printer className="w-4 h-4" /> Print
@@ -109,7 +109,7 @@ const Regional = () => {
             </div>
 
             {/* Category filter */}
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
                 {CATEGORIES.map(cat => (
                     <button
                         key={cat.key ?? 'all'}
