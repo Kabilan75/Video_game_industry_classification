@@ -76,8 +76,8 @@ app.include_router(admin.router, prefix="/admin", tags=["Admin"])
 app.include_router(export.router, prefix="/api/export", tags=["Export"])
 
 
-@app.get("/")
-async def root():
+@app.get("/api/welcome")
+async def api_welcome():
     return {
         "message": "Games Industry Jobs Dashboard API",
         "version": "1.1.0",
@@ -104,7 +104,9 @@ async def global_exception_handler(request: Request, exc: Exception):
 # Frontend Static File Serving (for Single-Container Deployment)
 # ------------------------------------------------------------------------------
 import os
+from fastapi.api import APIRouter
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
 # Check if static directory exists (it will in Docker production build)
 static_dir = os.path.join(os.path.dirname(__file__), "static")
@@ -112,6 +114,11 @@ if os.path.exists(static_dir):
     # Mount static files
     app.mount("/assets", StaticFiles(directory=os.path.join(static_dir, "assets")), name="assets")
     
+    # Explicit root handler for index.html
+    @app.get("/")
+    async def serve_root():
+        return FileResponse(os.path.join(static_dir, "index.html"))
+
     # Catch-all route for SPA (React Router)
     @app.get("/{full_path:path}")
     async def serve_spa(full_path: str):
