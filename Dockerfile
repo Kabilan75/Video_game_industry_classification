@@ -6,10 +6,10 @@
 FROM node:18-alpine as frontend-build
 WORKDIR /app/frontend
 
-COPY frontend/package*.json ./
-RUN npm install
-
 COPY frontend/ .
+# List files to debug potential issues
+RUN ls -la
+RUN npm install
 # Build for production with relative API paths (empty string)
 ENV VITE_API_URL=""
 RUN npm run build
