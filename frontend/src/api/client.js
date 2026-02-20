@@ -1,6 +1,10 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+// Use VITE_API_URL if defined (even if empty string for relative paths), 
+// otherwise default to localhost for local dev without env file.
+const API_URL = typeof import.meta.env.VITE_API_URL !== 'undefined'
+    ? import.meta.env.VITE_API_URL
+    : 'http://localhost:8000';
 
 const client = axios.create({
     baseURL: API_URL,
