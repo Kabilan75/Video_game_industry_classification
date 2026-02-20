@@ -104,7 +104,6 @@ async def global_exception_handler(request: Request, exc: Exception):
 # Frontend Static File Serving (for Single-Container Deployment)
 # ------------------------------------------------------------------------------
 import os
-from fastapi.api import APIRouter
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 
